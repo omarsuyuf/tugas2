@@ -1,12 +1,12 @@
 from django.db import models
 
 class Product(models.Model):
-    name = models.CharField(max_length=120)
+    name = models.CharField()
     price = models.IntegerField()
     description = models.TextField()
     thumbnail = models.URLField()
-    category = models.CharField(max_length=60)
-    is_featured = models.BooleanField(default=False)
+    category = models.CharField()
+    is_featured = models.BooleanField()
 
     def __str__(self):
         return self.name
