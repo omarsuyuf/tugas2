@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-xe9!b-&x7ljz^k%b0-&^7s8xz7eaefuj+$qk8jfmu^#q=a7p&)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]  # nanti tambah host PWS
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "omar-suyuf-tugas2.pbp.cs.ui.ac.id."]  # nanti tambah host PWS
 
 # Application definition
 
