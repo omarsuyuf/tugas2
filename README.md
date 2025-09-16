@@ -52,6 +52,10 @@ Apakah ada feedback untuk asdos di tutorial 2 yang sudah kalian kerjakan?
 
 
 Foto Postman :
+<img width="1280" height="822" alt="image" src="https://github.com/user-attachments/assets/308ba3c7-17f7-4bce-b223-7244aedd016b" />
+<img width="1280" height="918" alt="image" src="https://github.com/user-attachments/assets/ea96ef3f-70e0-4931-826a-0764f50517ba" />
+<img width="1280" height="676" alt="image" src="https://github.com/user-attachments/assets/30b14c8a-37fb-4e5a-8666-16d7563ff136" />
+<img width="1280" height="653" alt="image" src="https://github.com/user-attachments/assets/be0e9680-4bd8-43ba-bde1-7fbe4498acba" />
 
 
 
