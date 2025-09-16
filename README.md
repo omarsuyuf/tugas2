@@ -1,3 +1,67 @@
+======= TUGAS 3 ========
+
+- Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
+
+Agar menjadi data di backend dengan format yang mudah dibaca dan bisa dilihat/digunakan datanya oleh beberapa pihak. Dan agar dapat dikembangkan oleh tim developer lebih mudah
+
+
+- Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
+
+JSON karena lebih ringkas dan mudah dibaca, karena lebih cocok dengan struktur di programming language yang populer
+
+
+- Jelaskan fungsi dari method is_valid() pada form Django dan mengapa kita membutuhkan method tersebut?
+
+untuk menjalankan
+
+is_valid() ngecek input di form dan jika hasilnya true, maka data bersihnya ada di form.cleaned_data dan aman dipakai. Jika tidak maka input yang salah bisa ikut tersimpan dan berpotensi bikin error
+
+
+
+- Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
+
+csrf_token mencegah Cross-Site Request Forgery (CSRF), yaitu serangan yang memaksa browser pengguna terautentikasi mengirim request tanpa sepengetahuan mereka. Jika tidak dilindungi token, penyerang bisa menanam halaman/skrip yang saat dikunjungi user akan mengirim suatu tindakan seperti hack/grief ke situs kita. Token memastikan request berasal dari halaman milik aplikasi, bukan dari sumber asing.
+
+
+
+- Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+1. Membuat model Product sesuai dengan spesifikasi/requirement tugas yang diminta sebelumnya
+2. Menambahkan method increment_views() untuk menambah product_views.
+3. Membuat model form "ProductForm" dengan ketentuan yang diminta : name, price, description, thumbnail, category, is_featured.
+4. Menambah form.is_valid() sebelum form.save().
+5. Membuat tampilan di views.py untuk tiap segmen di websitenya :
+- show_main : untuk main page sebagai page utama yang menampilkan barang-barang dan informasi
+- create_product : untuk page tambah produk, mengisi data barang dan post
+- show_product : mengambil produk berdasarkan UUID, memanggil increment_views(), lalu render product_detail.html.
+6. Membuat code untuk data delivery XML/JSON, dengan membuat function show_xml dan show_json untuk memberi label seri semua Product ke XML/JSON.
+7. Routing urls.py menginclude main.urls. 
+- Page : "" -> show_main, "add/" -> create_product, "detail/<uuid:id>/" -> show_product
+- Data delivery : "xml/", "json/", "xml/<uuid:id>/", "json/<uuid:id>/"
+8. Membuat template html :
+- main.html : menampilkan data mahasiswa, dan daftar produk dengan tombol add dengan link per item
+- create_product.html : form sederhana dengan {% csrf_token %} dan tombol Simpan, 
+- product_detail.html : menampilkan detail produk termasuk product_views dan created_at.
+9. Test menjalankan runserver, dan test add 1 produk
+10. Coba akses 4 endpoint data delivery di Postman: /xml/, /json/, /xml/<UUID>/, /json/<UUID>/.
+11. Push ke git dan PWS
+
+
+
+Apakah ada feedback untuk asdos di tutorial 2 yang sudah kalian kerjakan?
+-
+
+
+Foto Postman :
+
+
+
+
+
+
+
+======= TUGAS 2 ========
+
+
 Link PWS:  https://omar-suyuf-tugas2.pbp.cs.ui.ac.id
 
 
