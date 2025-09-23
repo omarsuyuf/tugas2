@@ -1,4 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
 <h1>{{ app_name }}</h1>
-<p>Name: {{ name }}</p>
-<p>Class: {{ class }}</p>
-<p>NPM: {{ npm }}</p>
+
+<h5>Username:</h5>
+<p>{{ request.user.username }}</p>
+
+<h5>Sesi terakhir login: {{ last_login }}</h5>
+
+<h1>Products</h1>
+<a href="{% url 'main:create_product' %}">
+  <button>+ Add Product</button>
+</a>
+<a href="{% url 'main:logout' %}">
+  <button>Logout</button>
+</a>
+
+<h2>Products</h2>
+<ul>
+  {% for p in product_list %}
+    <li>
+      <strong>{{ p.name }}</strong> - Rp {{ p.price }}
+      <a href="{% url 'main:show_product' p.id %}">Detail</a>
+    </li>
+  {% empty %}
+    <li>Belum ada barang</li>
+  {% endfor %}
+</ul>
+{% endblock %}

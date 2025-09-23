@@ -1,3 +1,117 @@
+======= TUGAS 4 ========
+- Apa itu Django AuthenticationForm? Jelaskan juga kelebihan dan kekurangannya.
+
+AuthenticationForm adalah format form bawaan dari Django untuk sistem login (kayak ambil template login yang siap pake)
+
+Kelebihan : 
+a. Langsung pakai 
+b. Aman karna mengikuti mekanisme authentication dan hashing Django
+
+Kekurangan :
+a. Terbatas, jika mau verifikasi tambahan kayak OTP
+
+
+- Apa perbedaan antara autentikasi dan otorisasi? Bagaiamana Django mengimplementasikan kedua konsep tersebut?
+Autentikasi =  verifikasi identitas pengguna.
+Otorisasi = apa yang bisa dilakukan pengguna yang sudah terautentikasi.
+
+Implementasi dari django :
+- Autentikasi: beberapa komponen django seperti,  authenticate(), login(), logout(), AuthenticationForm().
+- Otorisasi: sistem permissions dan groups seperti, @login_required dan @permission_required, user.is_authenticated, user.has_perm()
+
+
+- Apa saja kelebihan dan kekurangan session dan cookies dalam konteks menyimpan state di aplikasi web?
+Cookies = ringan, tidak membebani server, tapi kapasitas kecil dan rawan dimodifikasi/dicuri kalau tidak diamankan.
+Session = aman karena data di server, bisa simpan banyak, tapi butuh storage server dan konfigurasi skalabilitas.
+
+- Apakah penggunaan cookies aman secara default dalam pengembangan web, atau apakah ada risiko potensial yang harus diwaspadai? Bagaimana Django menangani hal tersebut?
+
+Tidak otomatis aman, ada risiko XSS/CSRF dan pencurian jika tanpa HTTPS karena Django secara default simpan state di server, cookie hanya berisi session ID. 
+
+Django juga sediakan proteksi seperti, HttpOnly, Secure, SameSite, CSRF middleware.
+
+
+- Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+1. Pertama aktifin virtual env dan akses file
+2. Buat sistem registrasi dan login dengan membuat function di views.py dan membuat page register.html & login.html
+3. Masukkan di urls.py agar dapat dibuka linknya/pagenya
+4. Membuat sistem logout dengan membuat function di views.py dan masukkan di urls.py
+5. Membuat sistem agar login terlebih dahulu untuk mengakses website, dengan membuat code @login_required di function utama views.py
+6. Membuat code agar data dari cookies tercatat, dengan menggunakan HttpResponseRedirect, reverse, dan datetime, lalu mengimplementasikannya di function" utama seperti show_main, login, logout.
+7. Menghubungkan Model Product dengan user, dengan menambahkan "user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)" pada class Product agar terhubung.
+8. Buat migration
+9. Test run di local dan test uji ke fitur yang baru dibuat
+10. Push ke github dan pws
+
+
+======= TUGAS 3 ========
+
+- Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
+
+Agar menjadi data di backend dengan format yang mudah dibaca dan bisa dilihat/digunakan datanya oleh beberapa pihak. Dan agar dapat dikembangkan oleh tim developer lebih mudah
+
+
+- Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
+
+JSON karena lebih ringkas dan mudah dibaca, karena lebih cocok dengan struktur di programming language yang populer
+
+
+- Jelaskan fungsi dari method is_valid() pada form Django dan mengapa kita membutuhkan method tersebut?
+
+untuk menjalankan
+
+is_valid() ngecek input di form dan jika hasilnya true, maka data bersihnya ada di form.cleaned_data dan aman dipakai. Jika tidak maka input yang salah bisa ikut tersimpan dan berpotensi bikin error
+
+
+
+- Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
+
+csrf_token mencegah Cross-Site Request Forgery (CSRF), yaitu serangan yang memaksa browser pengguna terautentikasi mengirim request tanpa sepengetahuan mereka. Jika tidak dilindungi token, penyerang bisa menanam halaman/skrip yang saat dikunjungi user akan mengirim suatu tindakan seperti hack/grief ke situs kita. Token memastikan request berasal dari halaman milik aplikasi, bukan dari sumber asing.
+
+
+
+- Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+1. Membuat model Product sesuai dengan spesifikasi/requirement tugas yang diminta sebelumnya
+2. Menambahkan method increment_views() untuk menambah product_views.
+3. Membuat model form "ProductForm" dengan ketentuan yang diminta : name, price, description, thumbnail, category, is_featured.
+4. Menambah form.is_valid() sebelum form.save().
+5. Membuat tampilan di views.py untuk tiap segmen di websitenya :
+- show_main : untuk main page sebagai page utama yang menampilkan barang-barang dan informasi
+- create_product : untuk page tambah produk, mengisi data barang dan post
+- show_product : mengambil produk berdasarkan UUID, memanggil increment_views(), lalu render product_detail.html.
+6. Membuat code untuk data delivery XML/JSON, dengan membuat function show_xml dan show_json untuk memberi label seri semua Product ke XML/JSON.
+7. Routing urls.py menginclude main.urls. 
+- Page : "" -> show_main, "add/" -> create_product, "detail/<uuid:id>/" -> show_product
+- Data delivery : "xml/", "json/", "xml/<uuid:id>/", "json/<uuid:id>/"
+8. Membuat template html :
+- main.html : menampilkan data mahasiswa, dan daftar produk dengan tombol add dengan link per item
+- create_product.html : form sederhana dengan {% csrf_token %} dan tombol Simpan, 
+- product_detail.html : menampilkan detail produk termasuk product_views dan created_at.
+9. Test menjalankan runserver, dan test add 1 produk
+10. Coba akses 4 endpoint data delivery di Postman: /xml/, /json/, /xml/<UUID>/, /json/<UUID>/.
+11. Push ke git dan PWS
+
+
+
+Apakah ada feedback untuk asdos di tutorial 2 yang sudah kalian kerjakan?
+-
+
+
+Foto Postman :
+<img width="1280" height="822" alt="image" src="https://github.com/user-attachments/assets/308ba3c7-17f7-4bce-b223-7244aedd016b" />
+<img width="1280" height="918" alt="image" src="https://github.com/user-attachments/assets/ea96ef3f-70e0-4931-826a-0764f50517ba" />
+<img width="1280" height="676" alt="image" src="https://github.com/user-attachments/assets/30b14c8a-37fb-4e5a-8666-16d7563ff136" />
+<img width="1280" height="653" alt="image" src="https://github.com/user-attachments/assets/be0e9680-4bd8-43ba-bde1-7fbe4498acba" />
+
+
+
+
+
+
+
+======= TUGAS 2 ========
+
+
 Link PWS:  https://omar-suyuf-tugas2.pbp.cs.ui.ac.id
 
 

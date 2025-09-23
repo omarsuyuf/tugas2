@@ -30,7 +30,11 @@ PRODUCTION = os.getenv('PRODUCTION', 'False').lower() == 'true'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "omar-suyuf-tugas2.pbp.cs.ui.ac.id"] 
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "omar-suyuf-tugas2.pbp.cs.ui.ac.id",] 
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://omar-suyuf-tugas2.pbp.cs.ui.ac.id"
+]
 
 # Application definition
 
@@ -59,7 +63,7 @@ ROOT_URLCONF = 'shopproj.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
