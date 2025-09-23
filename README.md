@@ -1,3 +1,49 @@
+======= TUGAS 4 ========
+- Apa itu Django AuthenticationForm? Jelaskan juga kelebihan dan kekurangannya.
+
+AuthenticationForm adalah format form bawaan dari Django untuk sistem login (kayak ambil template login yang siap pake)
+
+Kelebihan : 
+a. Langsung pakai 
+b. Aman karna mengikuti mekanisme authentication dan hashing Django
+
+Kekurangan :
+a. Terbatas, jika mau verifikasi tambahan kayak OTP
+
+
+- Apa perbedaan antara autentikasi dan otorisasi? Bagaiamana Django mengimplementasikan kedua konsep tersebut?
+Autentikasi =  verifikasi identitas pengguna.
+Otorisasi = apa yang bisa dilakukan pengguna yang sudah terautentikasi.
+
+Implementasi dari django :
+- Autentikasi: beberapa komponen django seperti,  authenticate(), login(), logout(), AuthenticationForm().
+- Otorisasi: sistem permissions dan groups seperti, @login_required dan @permission_required, user.is_authenticated, user.has_perm()
+
+
+- Apa saja kelebihan dan kekurangan session dan cookies dalam konteks menyimpan state di aplikasi web?
+Cookies = ringan, tidak membebani server, tapi kapasitas kecil dan rawan dimodifikasi/dicuri kalau tidak diamankan.
+Session = aman karena data di server, bisa simpan banyak, tapi butuh storage server dan konfigurasi skalabilitas.
+
+- Apakah penggunaan cookies aman secara default dalam pengembangan web, atau apakah ada risiko potensial yang harus diwaspadai? Bagaimana Django menangani hal tersebut?
+
+Tidak otomatis aman, ada risiko XSS/CSRF dan pencurian jika tanpa HTTPS karena Django secara default simpan state di server, cookie hanya berisi session ID. 
+
+Django juga sediakan proteksi seperti, HttpOnly, Secure, SameSite, CSRF middleware.
+
+
+- Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+1. Pertama aktifin virtual env dan akses file
+2. Buat sistem registrasi dan login dengan membuat function di views.py dan membuat page register.html & login.html
+3. Masukkan di urls.py agar dapat dibuka linknya/pagenya
+4. Membuat sistem logout dengan membuat function di views.py dan masukkan di urls.py
+5. Membuat sistem agar login terlebih dahulu untuk mengakses website, dengan membuat code @login_required di function utama views.py
+6. Membuat code agar data dari cookies tercatat, dengan menggunakan HttpResponseRedirect, reverse, dan datetime, lalu mengimplementasikannya di function" utama seperti show_main, login, logout.
+7. Menghubungkan Model Product dengan user, dengan menambahkan "user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)" pada class Product agar terhubung.
+8. Buat migration
+9. Test run di local dan test uji ke fitur yang baru dibuat
+10. Push ke github dan pws
+
+
 ======= TUGAS 3 ========
 
 - Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?

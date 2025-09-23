@@ -2,17 +2,20 @@
 {% block content %}
 <h1>{{ app_name }}</h1>
 
-<h5>Name:</h5>
-<p>{{ name }}</p>
+<h5>Username:</h5>
+<p>{{ request.user.username }}</p>
 
-<h5>Class:</h5>
-<p>{{ class }}</p>
-
-<h5>NPM:</h5>
-<p>{{ npm }}</p>
+<h5>Sesi terakhir login: {{ last_login }}</h5>
 
 <h1>Products</h1>
-<a href="{% url 'main:create_product' %}">Add</a>
+<a href="{% url 'main:create_product' %}">
+  <button>+ Add Product</button>
+</a>
+<a href="{% url 'main:logout' %}">
+  <button>Logout</button>
+</a>
+
+<h2>Products</h2>
 <ul>
   {% for p in product_list %}
     <li>

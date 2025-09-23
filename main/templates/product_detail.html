@@ -1,7 +1,16 @@
 <h1>{{ product.name }}</h1>
+
 <img src="{{ product.thumbnail }}" alt="{{ product.name }}" style="max-width:240px;">
+
 <p>Harga : Rp {{ product.price }}</p>
 <p>Kategori: {{ product.category }}</p>
 <p>Item Unggulan: {{ product.is_featured }}</p>
 <p>{{ product.description }}</p>
+
+{% if product.user %}
+  <p>Author: {{ product.user.username }}</p>
+{% else %}
+  <p>Author: Anonymous</p>
+{% endif %}
+
 <p><a href="{% url 'main:show_main' %}">Back</a></p>
