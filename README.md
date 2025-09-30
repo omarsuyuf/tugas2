@@ -1,3 +1,52 @@
+======= TUGAS 5 ========
+
+- Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+1. !important (penulis/author)
+2. Inline style: style="..."
+3. Selector dengan ID
+4. Selector class / attribute / pseudo-class
+5. Selector element / pseudo-element
+6. Universal * dan inheritance
+
+Dengan catatan jika sama kuatnya, yang muncul terakhir di file menang.  
+
+
+-  Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design, serta jelaskan mengapa!
+
+Karena mayoritas akses web sekarang dari layar kecil (HP). Tanpa layout yang menyesuaikan, maka banyak bisa terjadi UX yang rusak, seperti teks kecil, tombol susah diklik, scroll horizontal, dan lain-lain. Responsive juga ngasih satu codebase untuk semua device, biaya maintenance lebih murah, performa lebih stabil, dan ramah SEO serta aksesibilitas.
+
+Contoh:
+Sudah responsive: toko online/e-commerce modern atau portal berita modern.
+Belum responsive: situs lama berbasis tabel. Di mobile harus pinch-zoom, text terlalu kecil, tombol saling berhimpitan, horizontal scroll muncul.
+
+
+- Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+
+Margin = jarak di luar border, memisahkan elemen dengan elemen lain, gabisa diberi warna.
+Border = garis pembatas di antara margin dan padding, bisa diwarnai.
+Padding = jarak di dalam border, antara konten dengan border, mengembang bersama background.
+
+- Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+
+Flexbox: layout 1 dimensi (baris atau kolom), kegunaannya lebih cocok untuk navbar, alignment vertikal/horizontal, card actions.
+CSS Grid: layout 2 dimensi (baris dan kolom), kegunaannya lebih cocok untuk dashboard, product listing multi-k
+
+
+- Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+
+1. Menambahkan tailwind di base
+2. Menambahkan fitur edit dan delete Product dengan cara membuat function di views.py , lalu buat file html nya, lalu masukkan urls nya ke urls.py, lalu buat tombolnya di main.htmnl.
+3. Membuat navigation bar (kayak header) dengan cara membuat file navbar.html lalu impor dengan cara include di main.html
+4. Konfigurasi static files dengan cara menambahkan 'whitenoise.middleware.WhiteNoiseMiddleware' di MIDDLEWARE pada settings.py dan static_url
+5. Membuat file global.css
+6. Menghubungkan global.css dan tailwind ke base.html dengan modifikasi pada base.html
+7. Membuat custom styling pada global.css
+8. Styling navbar,login,register,home,card_product,product_detail,create_product,edit_product dengan css
+9. Commit dan push
+
+
+
+
 ======= TUGAS 4 ========
 - Apa itu Django AuthenticationForm? Jelaskan juga kelebihan dan kekurangannya.
 
