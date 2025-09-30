@@ -14,6 +14,8 @@ from django.urls import reverse
 from .models import Product
 from .forms import ProductForm
 
+
+
 @login_required(login_url='/login')
 def show_main(request):
     filter_type = request.GET.get("filter", "all")
@@ -53,7 +55,6 @@ def show_product(request, id):
 
     context = {"product": product}
     return render(request, "product_detail.html", context)
-
 
 def show_xml(request):
     products = Product.objects.all()
