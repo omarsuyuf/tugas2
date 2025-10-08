@@ -1,0 +1,18 @@
+{% load static %}
+<div
+  id="toast-component"
+  class="fixed top-6 left-1/2 -translate-x-1/2
+         p-4 px-6 rounded-xl shadow-xl
+         z-50 opacity-0 -translate-y-4
+         transition-all duration-300
+         flex items-center gap-3
+         pointer-events-none"  
+  aria-hidden="true"
+>
+  <span id="toast-icon" class="text-2xl select-none">⚠️</span>
+  <div class="select-none">
+    <h3 id="toast-title" class="font-bold">This is a Sample Title</h3>
+    <p id="toast-message" class="text-sm">This is a Sample Message</p>
+  </div>
+</div>
+<script src="{% static 'js/toast.js' %}"></script>

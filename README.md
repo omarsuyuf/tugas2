@@ -1,3 +1,45 @@
+======= TUGAS 6 ========
+
+- Apa perbedaan antara synchronous request dan asynchronous request?
+Synchronous = Alurnya kurang lebih browser mengirim request, page menunggu respons dengan catatan UI terblokir sampai server selesai, lalu seluruh page biasanya di-render ulang.
+
+Asynchronous = Alurnya browser mengirim request di belakang layar (AJAX/fetch), namun berbeda dengan synchronous, ini UI tetap responsif, ketika respons tiba hanya bagian tertentu DOM yang diperbarui, tidak perlu reload penuh halaman, efisien dan terasa cepat.
+
+
+- Bagaimana AJAX bekerja di Django (alur request–response)?
+1. Event di client - seperti user klik tombol/submit form via JS
+2. Kirim request - JavaScript (fetch/XMLHttpRequest) mengirim HTTP request ke URL Django (view) dengan header, method (GET/POST), payload (JSON/FormData), dan CSRF token untuk POST
+3. Django view memproses - Validasi input, akses DB, jalankan logic
+4. Kirim respons - View mengembalikan JSON (JsonResponse) atau fragmen HTML
+5. Update UI - JS di client membaca respons dan memodifikasi DOM
+
+
+- Apa keuntungan menggunakan AJAX dibandingkan render biasa di Django?
+1. UX lebih cepat, tidak reload penuh
+3. Bandwidth efisien, kirim dan terima data seperlunya (JSON/HTML kecil).
+3. Interaktivitas tinggi (form validasi dinamis, live search, infinite scroll)
+4. Arsitektur rapi, pisahkan data (JSON API) dan presentasi (JS/HTML), mudah direuse untuk mobile.
+
+
+- Bagaimana cara memastikan keamanan saat menggunakan AJAX untuk fitur Login dan Register di Django?
+
+1. Sertakan CSRF token pada POST
+2. Selalu pakai TLS agar kredensial tidak disadap
+3. Validasi & sanitasi server-side, jangan percaya validasi JS. Gunakan Django Forms/Serializer untuk validasi, bersihkan input, agar mencegah XSS/SQLi
+4. Session/Cookie amankan = SESSION_COOKIE_SECURE=True, CSRF_COOKIE_SECURE=True, SESSION_COOKIE_HTTPONLY=True, CSRF_COOKIE_HTTPONLY=False (agar JS bisa baca via cookie-to-header pattern), SESSION_COOKIE_SAMESITE='Lax' atau 'Strict'.
+5. Rate limiting & anti-bruteforce, seperti captcha setelah beberapa gagal
+6. Pesan error generik dengan respons yang seragam agar ga bocor informasi username
+7. Log attempt login/register, IP, user agent untuk deteksi jika ada yang janggal
+
+
+- Bagaimana AJAX mempengaruhi pengalaman pengguna (User Experience) pada website?
+1. Responsif, jadi kerasa hanya bagian relevan yang berubah
+2. Scroll/posisi pengguna tidak kereset karna reload
+3. Feedback real time
+4. Performa lebih enak karna beban render dan transfer data lebih ringan di mata pengguna
+
+
+
 ======= TUGAS 5 ========
 
 - Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!

@@ -1,94 +1,181 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load humanize %}
 
 {% block meta %}
-<title>{{ product.name }} - Football Product</title>
+<title>Product Detail - Football Shop</title>
 {% endblock meta %}
 
 {% block content %}
-<div class="bg-gray-50 w-full min-h-screen">
+<div class="bg-neutral-950 w-full min-h-screen">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-    <!-- Back Navigation -->
+    <!-- Back -->
     <div class="mb-6">
-      <a href="{% url 'main:show_main' %}" class="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-        ← Back to Product
+      <a href="{% url 'main:show_main' %}" class="text-neutral-300 hover:text-white font-medium transition-colors">
+        ← Back to Products
       </a>
     </div>
 
-    <!-- Article -->
-    <article class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+    <!-- Loading -->
+    <div id="loading-state" class="bg-neutral-900 text-neutral-200 rounded-lg border border-neutral-800 p-12 text-center">
+      <svg class="animate-spin h-8 w-8 text-emerald-500 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+      </svg>
+      <p class="text-neutral-400 mt-3">Loading product detail...</p>
+    </div>
 
+    <!-- Error -->
+    <div id="error-state" class="bg-neutral-900 text-neutral-200 rounded-lg border border-neutral-800 p-12 text-center hidden">
+      <div class="w-16 h-16 mx-auto mb-4"><div class="text-red-400 text-5xl">⚠️</div></div>
+      <h3 class="text-lg font-medium text-white mb-2">Failed to load product</h3>
+      <p class="text-neutral-400">Please try again later.</p>
+    </div>
+
+    <!-- Content -->
+    <article id="article-content" class="bg-neutral-900 text-neutral-100 rounded-lg border border-neutral-800 overflow-hidden hidden">
       <!-- Header -->
       <div class="p-6 sm:p-8">
-        <div class="flex flex-wrap items-center gap-2 mb-3">
-          <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-green-600 text-white">
-            {{ product.category }}
-          </span>
-          {% if product.is_featured %}
-            <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-yellow-100 text-yellow-800">
-              Featured
-            </span>
-          {% endif %}
-          {% if product.is_product_hot %}
-            <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-red-100 text-red-800">
-              Hot
-            </span>
-          {% endif %}
-        </div>
+        <div id="badges-container" class="flex flex-wrap items-center gap-2 mb-4"></div>
 
-        <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">
-          {{ product.name }}
-        </h1>
+        <h1 id="article-title" class="text-3xl sm:text-4xl font-bold text-white leading-tight mb-3"></h1>
 
-        <!-- Price -->
-        <div class="mt-2 text-2xl font-semibold text-green-700">
-          Rp {{ product.price|intcomma }}
-        </div>
-
-        <div class="mt-3 flex flex-wrap items-center text-sm text-gray-500 gap-4">
-          <time datetime="{{ product.created_at|date:'c' }}">
-            {{ product.created_at|date:"M j, Y g:i A" }}
-          </time>
-          <span>{{ product.product_views }} views</span>
+        <div class="flex flex-wrap items-center text-sm text-neutral-400 gap-4">
+          <time id="article-date"></time>
+          <span id="article-views"></span>
+          <span id="article-price" class="text-emerald-400 font-semibold"></span>
         </div>
       </div>
 
-      <!-- Featured Image -->
-      <div class="px-6 sm:px-8">
-        {% if product.thumbnail %}
-          <img src="{{ product.thumbnail }}" alt="{{ product.name }}" class="w-full h-64 sm:h-80 lg:h-96 object-cover rounded-lg">
-        {% else %}
-          <img src="{% static 'image/no-product.png' %}" alt="No image" class="w-full h-64 sm:h-80 lg:h-96 object-cover rounded-lg">
-        {% endif %}
+      <!-- Image -->
+      <div id="featured-image-container" class="px-6 sm:px-8 hidden">
+        <img id="featured-image" src="" alt="" class="w-full h-64 sm:h-80 lg:h-96 object-cover rounded-lg">
       </div>
 
       <!-- Description -->
       <div class="p-6 sm:p-8">
-        <div class="prose prose-lg max-w-none">
-          <div class="text-gray-700 leading-relaxed whitespace-pre-line text-base sm:text-lg">
-            {{ product.description }}
-          </div>
+        <div class="prose prose-invert prose-lg max-w-none">
+          <div id="article-content-text" class="text-neutral-200 leading-relaxed whitespace-pre-line text-base sm:text-lg"></div>
         </div>
       </div>
 
       <!-- Author -->
-      <div class="border-t border-gray-200 p-6 sm:p-8 bg-gray-50">
+      <div class="border-t border-neutral-800 p-6 sm:p-8 bg-neutral-950">
         <div class="flex items-center justify-between">
           <div>
-            <div class="font-medium text-gray-900">
-              {% if product.user %}
-                <p>Author: {{ product.user.username }}</p>
-              {% else %}
-                <p>Author: Anonymous</p>
-              {% endif %}
+            <div class="font-medium text-white">
+              <p id="article-author">Author: Loading...</p>
             </div>
-            <p class="text-sm text-gray-500">Author</p>
+            <p class="text-sm text-neutral-400">Owner</p>
           </div>
         </div>
       </div>
     </article>
+
   </div>
 </div>
+
+<!-- ============== Inline Script: AJAX detail (sinkron dgn json/<uuid:id>/) ============== -->
+<script>
+  // Ambil ID dari context; fallback dari URL /.../<uuid>/
+  let PRODUCT_ID = "{{ product.id|default_if_none:'' }}";
+  if (!PRODUCT_ID) {
+    const parts = location.pathname.split('/').filter(Boolean);
+    PRODUCT_ID = parts[parts.length - 1];
+  }
+
+  // Endpoint JSON pakai reverse URL lalu replace placeholder UUID
+  const PRODUCT_DETAIL_ENDPOINT =
+    `{% url 'main:show_json_by_id' '00000000-0000-0000-0000-000000000000' %}`
+      .replace('00000000-0000-0000-0000-000000000000', encodeURIComponent(PRODUCT_ID));
+
+  // DOM
+  const loadingState = document.getElementById('loading-state');
+  const errorState = document.getElementById('error-state');
+  const articleContent = document.getElementById('article-content');
+  const badgesContainer = document.getElementById('badges-container');
+  const articleTitle = document.getElementById('article-title');
+  const articleDate = document.getElementById('article-date');
+  const articleViews = document.getElementById('article-views');
+  const articlePrice = document.getElementById('article-price');
+  const featuredImageContainer = document.getElementById('featured-image-container');
+  const featuredImage = document.getElementById('featured-image');
+  const articleContentText = document.getElementById('article-content-text');
+  const articleAuthor = document.getElementById('article-author');
+
+  function showState(state) {
+    loadingState.classList.toggle('hidden', state !== 'loading');
+    errorState.classList.toggle('hidden', state !== 'error');
+    articleContent.classList.toggle('hidden', state !== 'ready');
+  }
+
+  function getCategoryLabel(code) {
+    const map = { ball:'Ball', boots:'Boots', jersey:'Jersey', accessory:'Accessory', kit:'Kit' };
+    return map[code] || code || 'Uncategorized';
+  }
+
+  function renderProduct(p) {
+    document.title = `${p.name} - Football Shop`;
+    articleTitle.textContent = p.name || '';
+
+    // Badges
+    badgesContainer.innerHTML = '';
+    const cat = document.createElement('span');
+    cat.className = 'inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-emerald-600 text-white';
+    cat.textContent = getCategoryLabel(p.category);
+    badgesContainer.appendChild(cat);
+
+    if (p.is_featured) {
+      const badge = document.createElement('span');
+      badge.className = 'inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-yellow-200/90 text-yellow-900';
+      badge.textContent = 'Featured';
+      badgesContainer.appendChild(badge);
+    }
+    if ((p.product_views ?? 0) > 20) {
+      const hot = document.createElement('span');
+      hot.className = 'inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-red-300/90 text-red-900';
+      hot.textContent = 'Hot';
+      badgesContainer.appendChild(hot);
+    }
+
+    // Meta
+    if (p.created_at) {
+      const d = new Date(p.created_at);
+      articleDate.textContent = d.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
+    } else {
+      articleDate.textContent = '';
+    }
+    articleViews.textContent = `${p.product_views ?? 0} views`;
+    articlePrice.textContent = typeof p.price === 'number' ? 'Rp ' + p.price.toLocaleString('id-ID') : (p.price || '');
+
+    // Image
+    if (p.thumbnail) {
+      featuredImage.src = p.thumbnail;
+      featuredImage.alt = p.name || 'product';
+      featuredImageContainer.classList.remove('hidden');
+    } else {
+      featuredImageContainer.classList.add('hidden');
+    }
+
+    // Description & author
+    articleContentText.textContent = p.description || '';
+    articleAuthor.textContent = 'Author: ' + (p.user_username || 'Anonymous');
+  }
+
+  async function loadProductDetail() {
+    try {
+      showState('loading');
+      const res = await fetch(PRODUCT_DETAIL_ENDPOINT, { headers: { 'Accept': 'application/json' } });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      renderProduct(data);
+      showState('ready');
+    } catch (err) {
+      console.error('[detail] error:', err);
+      showState('error');
+    }
+  }
+
+  loadProductDetail();
+</script>
 {% endblock content %}

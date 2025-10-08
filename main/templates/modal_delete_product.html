@@ -1,0 +1,63 @@
+<!-- Modal Delete Product (AJAX) -->
+<div id="product-delete-backdrop" class="fixed inset-0 bg-black/50 hidden"></div>
+
+<div id="product-delete-modal" class="fixed inset-0 hidden items-center justify-center p-4 z-50">
+  <div class="bg-neutral-900 text-white rounded-xl w-full max-w-md shadow-2xl border border-neutral-800">
+    <div class="px-5 py-4 border-b border-neutral-800 flex items-center justify-between">
+      <h3 class="text-lg font-semibold">Delete Product</h3>
+      <button type="button" class="text-neutral-400 hover:text-white" data-close-delete>&times;</button>
+    </div>
+
+    <div class="p-5 space-y-4">
+      <p class="text-neutral-300">
+        Are you sure you want to delete
+        <span id="del-name" class="font-semibold text-white"></span>?
+      </p>
+      <input type="hidden" id="del-id" />
+      <div class="pt-2 flex items-center justify-end gap-3">
+        <button type="button" class="px-4 py-2 rounded-md border border-neutral-700 text-neutral-200 hover:bg-neutral-800" data-close-delete>Cancel</button>
+        <button type="button" id="btn-confirm-delete" class="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const DELETE_ENDPOINT = (id) => `{% url 'main:delete_product_entry_ajax' '00000000-0000-0000-0000-000000000000' %}`
+  .replace('00000000-0000-0000-0000-000000000000', encodeURIComponent(id));
+
+function openDeleteModal(){
+  document.getElementById('product-delete-modal').classList.remove('hidden');
+  document.getElementById('product-delete-modal').classList.add('flex');
+  document.getElementById('product-delete-backdrop').classList.remove('hidden');
+}
+function closeDeleteModal(){
+  document.getElementById('product-delete-modal').classList.add('hidden');
+  document.getElementById('product-delete-modal').classList.remove('flex');
+  document.getElementById('product-delete-backdrop').classList.add('hidden');
+}
+
+document.querySelectorAll('[data-close-delete]').forEach(btn=>{
+  btn.addEventListener('click', (e)=>{ e.preventDefault(); closeDeleteModal(); });
+});
+
+// Konfirmasi
+document.getElementById('btn-confirm-delete').addEventListener('click', async ()=>{
+  const id = document.getElementById('del-id').value;
+  const res = await fetch(DELETE_ENDPOINT(id), { method: 'POST' }); // sesuaikan kalau kamu pakai DELETE/CSRF
+  if (!res.ok) {
+    (window.showToast ? showToast('Failed to delete product', '', 'error') : alert('Failed to delete product'));
+    return;
+  }
+  closeDeleteModal();
+  (window.showToast ? showToast('Product deleted', '', 'success') : console.log('Product deleted'));
+  document.dispatchEvent(new CustomEvent('productDeleted'));
+});
+
+// API dipanggil dari main.html saat klik delete
+function startDeleteFlow(id, name){
+  document.getElementById('del-id').value = id;
+  document.getElementById('del-name').textContent = name || '';
+  openDeleteModal();
+}
+</script>
