@@ -8,6 +8,8 @@ from main.views import delete_product
 from .views import add_product_entry_ajax
 from .views import update_product_entry_ajax
 from .views import delete_product_entry_ajax
+from .views import proxy_image
+from .views import create_product_flutter
 
 from . import views
 
@@ -29,4 +31,7 @@ urlpatterns = [
     path("create-product-ajax", add_product_entry_ajax, name="add_product_entry_ajax"),
     path("update-product-ajax/<uuid:id>/", update_product_entry_ajax, name="update_product_entry_ajax"),
     path("delete-product-ajax/<uuid:id>/", delete_product_entry_ajax, name="delete_product_entry_ajax"),
+    path('proxy-image/', proxy_image, name='proxy_image'),
+    path('create-flutter/', create_product_flutter, name='create_product_flutter'),
 ]
+

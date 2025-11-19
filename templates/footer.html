@@ -1,0 +1,27 @@
+{% load static %}
+<footer class="">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+
+        <div class="flex flex-col items-centered md:items-start">
+            <img src="{% static 'image/bola.jpg' %}" alt="Logo" class="w-20 h-20 mb-3 rounded-full object-cover shadow-lg">
+            <p class="text-gray-400 text-sm text-center md:text-left">
+                Football Shop
+            </p>
+        </div>
+
+        <div class="text-center md:text-left">
+            <h3 class="text-lg font-semibold text-white mb-3">Navigasi</h3>
+            <ul class="space-y-2">
+                <li><a href="{% url 'main:show_main' %}" class="hover:text-white transition">Home</a></li>
+            </ul>
+        </div>
+
+        <div class="flex flex-col items-center md:items-end">
+            <h3 class=""text-lg font-semibold text-white mb-3>Create Product</h3>
+            <a href="{% url 'main:create_product' %}"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-lg shadow transition">
+            Create Product
+        </a>
+        </div>
+    </div>
+</footer>

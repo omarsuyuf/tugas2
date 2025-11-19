@@ -11,9 +11,11 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-
+from django.utils.html import strip_tags
 from .models import Product
 from .forms import ProductForm
+import requests
+import json
 
 User = get_user_model()
 
@@ -21,6 +23,9 @@ User = get_user_model()
 
 @login_required(login_url='/login')
 def show_main(request):
+    print(f"show_main - User authenticated: {request.user.is_authenticated}")  # Debug
+    print(f"show_main - Username: {request.user.username if request.user.is_authenticated else 'Anonymous'}")  # Debug
+    
     filter_type = request.GET.get("filter", "all")
 
     if filter_type == "all":
@@ -145,24 +150,33 @@ def register(request):
 
     return render(request, 'register.html', {})
 
-def login_user(request): 
+def login_user(request):
     if request.method == 'POST':
-        username = (request.POST.get('username') or '').strip()
-        password = request.POST.get('password') or ''
-        user = authenticate(request, username=username, password=password)
-
-        if user:
+        form = AuthenticationForm(data=request.POST)
+        
+        if form.is_valid():
+            user = form.get_user()
             login(request, user)
+            
             if _is_ajax(request):
-                return JsonResponse({'ok': True}, status=200)
+                response = JsonResponse({'ok': True}, status=200)
+                response.set_cookie('last_login', str(datetime.datetime.now()))
+                return response
+            
             messages.success(request, 'Login sukses.')
-            return redirect('main:show_main')
+            response = HttpResponseRedirect(reverse('main:show_main'))
+            response.set_cookie('last_login', str(datetime.datetime.now()))
+            return response
         else:
+            # Form tidak valid
             if _is_ajax(request):
                 return JsonResponse({'ok': False, 'error': 'Username atau password salah.'}, status=400)
             messages.error(request, 'Username atau password salah.')
-            return render(request, 'login.html', {})  
-    return render(request, 'login.html', {})
+    else:
+        form = AuthenticationForm(request)
+    
+    context = {'form': form}
+    return render(request, 'login.html', context)
 
 def logout_user(request):
     logout(request)
@@ -256,3 +270,46 @@ def delete_product_entry_ajax(request, id):
     except Product.DoesNotExist:
         return JsonResponse({'detail': 'Not found'}, status=404)
     
+
+def proxy_image(request):
+    image_url = request.GET.get('url')
+    if not image_url:
+        return HttpResponse('No URL provided', status=400)
+    try:
+        # Fetch image from external source
+        response = requests.get(image_url, timeout=10)
+        response.raise_for_status()
+        # Return the image with proper content type
+        return HttpResponse(
+            response.content,
+            content_type=response.headers.get('Content-Type', 'image/jpeg')
+        )
+    except requests.RequestException as e:
+        return HttpResponse(f'Error fetching image: {str(e)}', status=500)
+
+@csrf_exempt
+def create_product_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        name = strip_tags(data.get("name", ""))
+        description = strip_tags(data.get("description", ""))
+        price = data.get("price", 0)
+        thumbnail = data.get("thumbnail", "")  # GANTI dari "image" ke "thumbnail"
+        category = data.get("category", "")
+        is_featured = data.get("is_featured", False)  # TAMBAH ini
+        user = request.user
+        
+        new_product = Product(
+            name=name, 
+            description=description,
+            price=price,
+            thumbnail=thumbnail,  # GANTI dari image ke thumbnail
+            category=category,
+            is_featured=is_featured,  # TAMBAH ini
+            user=user
+        )
+        new_product.save()
+        
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
